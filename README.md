@@ -1,37 +1,31 @@
-This repository implements several algorithms:
+This is not my code. This is from John Schulman's modular_rl. I made minor changes and added some files to make things easier.
 
-- Trust Region Policy Optimization [1]
-- Proximal Policy Optimization (i.e., TRPO, but using a penalty instead of a constraint on KL divergence), where each subproblem is solved with either SGD or L-BFGS
-- Cross Entropy Method
-
-TRPO and PPO are implemented with neural-network value functions and use GAE [2].
+#Getting started#
 
 
-This library is written in a modular way to allow for sharing code between TRPO and PPO variants, and to write the same code for different kinds of action spaces.
+Packages for modular rl:
 
-Dependencies:
+	virtualenv env
+	source env/bin/activate
+	pip install numpy tabulate scipy
+	pip install keras==1.0.1
+	pip install theano==0.8.2
+	
+Gym + optional mujoco-py if you don't already have it:
 
-- keras (1.0.1)
-- theano (0.8.2)
-- tabulate
-- numpy
-- scipy
+	git clone git@github.com:openai/gym.git
+	cd gym
+	pip install -e .
+	pip install mujoco-py==0.5.7
 
+If you would like to use mujoco-py make sure that you have mujoco 131 installed with a valid license.
 
-To run the algorithms implemented here, you should put `modular_rl` on your `PYTHONPATH`, or run the scripts (e.g. `run_pg.py`) from this directory.
+Run both of these to make sure it's working:
+	
+	KERAS_BACKEND=theano python ./run_pg.py --env HalfCheetah-v1 --agent modular_rl.agentzoo.TrpoAgent
 
-Good parameter settings can be found in the `experiments` directory.
+When you run this, a new directory will be created in data/IDENTIFIER/. Each iteration, it will save weights.pkl, which contains the network weights/biases,
+and stats.pkl, which contains mean/std for inputs.
 
-You can learn about the various parameters by running one of the experiment scripts with the `-h` flag, but providing the (required) `env` and `agent` parameters. (Those parameters determine what other parameters are available.) For example, to see the parameters of TRPO,
-
-    ./run_pg.py --env CartPole-v0 --agent modular_rl.agentzoo.TrpoAgent -h
-
-To the the parameters of CEM,
-
-    ./run_cem.py --env=Acrobot-v0 --agent=modular_rl.agentzoo.DeterministicAgent  --n_iter=2
-
-
-[1] JS, S Levine, P Moritz, M Jordan, P Abbeel, "Trust region policy optimization." arXiv preprint arXiv:1502.05477 (2015).
-
-[2] JS, P Moritz, S Levine, M Jordan, P Abbeel, "High-dimensional continuous control using generalized advantage estimation." arXiv preprint arXiv:1506.02438 (2015).
-
+This code requires fairly specific packages. If you only care about getting a policy and not modifying/analyzing the RL part, then
+the best thing to do is run the code in this env and then copy the weights/stats to your project and use your own project's env.

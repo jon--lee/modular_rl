@@ -8,7 +8,10 @@ from importlib import import_module
 import scipy.optimize
 from .keras_theano_setup import floatX, FNOPTS
 from keras.layers.core import Layer
-
+import os
+import pickle
+import IPython
+import string
 # ================================================================
 # Make agent 
 # ================================================================
@@ -98,6 +101,18 @@ def run_policy_gradient_algorithm(env, agent, usercfg=None, callback=None):
         add_prefixed_stats(stats, "pol", pol_stats)
         stats["TimeElapsed"] = time.time() - tstart
         if callback: callback(stats)
+
+        weights = agent.policy.net.get_weights()
+        stats = [agent.obfilter.rs.mean, agent.obfilter.rs.std]
+        envname = env.env.envname
+        ident = env.env.ident
+        directory = 'data/' + ident + '/'
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        
+        pickle.dump(weights, open(directory + 'weights.pkl', 'w'))
+        pickle.dump(stats, open(directory + 'stats.pkl', 'w'))
+
 
 def get_paths(env, agent, cfg, seed_iter):
     if cfg["parallel"]:

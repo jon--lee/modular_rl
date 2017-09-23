@@ -22,3 +22,7 @@ logs/
 ghostdriver.log
 
 htmlcov
+
+gym/
+env/
+data/
