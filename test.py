@@ -16,12 +16,10 @@ net = knet.Network([64, 64])
 net.load_weights(directory + 'weights.pkl', directory + 'stats.pkl')
 
 env = gym.envs.make('HalfCheetah-v1')
-#env = gym.envs.make('Pendulum2-v0')
 
 s = env.reset()
 for t in range(200):
     a = net.predict([s])[0]
-    print a
     s, _, _, _ = env.step(a)
     env.render()
 

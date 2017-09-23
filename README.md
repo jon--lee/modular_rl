@@ -7,7 +7,7 @@ Packages for modular rl:
 
 	virtualenv env
 	source env/bin/activate
-	pip install numpy tabulate scipy
+	pip install numpy tabulate scipy sklearn
 	pip install keras==1.0.1
 	pip install theano==0.8.2
 	
@@ -34,3 +34,4 @@ Once that's finished, you can check to see that everything was saved properly by
 Replace IDENTIFIER with your randomly generated identifier. Feel free to look through test.py and knet.py to see how to load the policies.
 
 This code requires fairly specific package versions. If you only care about getting a policy and not modifying/analyzing the RL part, then the best thing to do is run the code in this env and then copy the weights/stats to your project and use your own project's env.
+The reason that I recommend this is that this version of Keras is very outdated.

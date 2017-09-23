@@ -3,11 +3,8 @@ import keras
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from keras import optimizers
-from keras import losses
 from keras import backend
-import matplotlib.pyplot as plt
 import IPython
-from numba import jit
 import os
 from sklearn.model_selection import train_test_split
 import pickle
@@ -27,7 +24,6 @@ class bcolors:
 class Network:
 
     def __init__(self, arch, learning_rate=.01, epochs=600):
-        backend.clear_session()
         self.constructed = False
         self.learning_rate = learning_rate
         self.epochs = epochs
@@ -37,7 +33,6 @@ class Network:
         self.mean = None
         self.std = None
 
-    @jit
     def whiten(self, X):
         X = X - self.mean
         X = X / self.std
@@ -47,7 +42,6 @@ class Network:
         X[locs] = 0.0
         return X
 
-    @jit
     def params(self, X):
         self.mean = np.mean(X, axis=0)
         self.std = np.std(X, axis=0)
@@ -89,7 +83,6 @@ class Network:
         return 1.0 - loss/res
 
     def construct(self, n, d):
-        backend.clear_session()
         model = Sequential()
         last_shape = (n,)
         for i in range(len(self.arch)):
@@ -97,7 +90,7 @@ class Network:
             last_shape = (self.arch[i],)
 
         model.add(Dense(d, activation='linear', input_shape=last_shape))
-        model.compile(loss=losses.mean_squared_error,
+        model.compile(loss='mean_squared_error',
               optimizer=optimizers.Adam(lr=self.learning_rate))
         self.model = model
 
